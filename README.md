@@ -261,7 +261,8 @@ No code changes are needed when adding songs.
 
 ---
 
-## Author
-
-Built for CSA2001 — Fundamentals in AI and ML
-VIT Bhopal — 2024
+If you have questions or suggestions, feel free to reach out:
+- GitHub: https://github.com/enchanter-coder
+- Email: ishanshrivas0966@gmail.com(primary)
+- Email: ishan.25bai10966@vitbhopal.ac.in(College mail)
+  
