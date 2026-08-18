@@ -1,0 +1,61 @@
+song_id,title,artist,language,vibe,bpm_range,city,featured_artists
+1,Maina,Seedhe Maut,Hindi,"Conscious, Sad",slow,Delhi,
+2,Bhaago,Naam Sujal,Hindi,"Conscious, Motivational",mid,Other,Gravity
+3,Dehshat ho,Raftaar,Hindi,Chill,slow,Delhi,Yashraj
+4,Gurantee,Krsna,Hindi,Conscious,mid,Delhi,Yashraj
+5,Sheher,Raga,Hindi,Aggressive,slow,Delhi,
+6,Killa klassic,Naam Sujal,Hindi,Aggressive,slow,Other,
+7,Silence,Yung Sammy,"Hindi, Haryanvi",Aggressive,slow,Delhi,
+8,Run it up,Hanumankind,English,"Aggressive, Conscious",fast,Other,
+9,New riot,Rebel,English,Aggressive,fast,Other,
+10,Naaz,Siyaahi,Hindi,Motivational,mid,Other,
+11,That's a fact,Hanumankind,"English, Hindi",Chill,mid,Delhi,Yashraj
+12,Buss down,Krsna,"Hindi, English","Chill, Motivational",slow,Delhi,Raftaar
+13,Yours truly,Krsna,Hindi,Aggressive,slow,Delhi,
+14,Khoon,Seedhe Maut,"Hindi, Punjabi","Aggressive, Conscious",fast,Delhi,Sikander Kahlon
+15,Mr. rambo,Yung Sammy,"Hindi, Haryanvi",Aggressive,slow,Delhi,
+16,Bhagwaan,Karma,Hindi,"Sad, Conscious",slow,Delhi,
+17,Trap Praa,Prabh Deep,"Hindi, Punjabi",Chill,slow,Chandigarh,Raftaar
+18,Do guna,Seedhe Maut,Hindi,Conscious,mid,Delhi,
+19,Woh raat,Raftaar,Hindi,Aggressive,fast,Delhi,Krsna
+20,3:59 AM,Divine,Hindi,"Aggressive, Motivational",slow,Mumbai,
+21,VN5,Yashraj,Hindi,"Aggressive, Motivational",slow,Mumbai,
+22,Baazigar,Divine,Hindi,Aggressive,slow,Mumbai,
+23,Akatsuki,Seedhe Maut,Hindi,Aggressive,fast,Delhi,Raga
+24,Angaar,Ikka,Hindi,"Aggressive, Motivational",mid,Delhi,Raftaar
+25,Prarthana,Krsna,Hindi,Chill,mid,Delhi,
+26,Jaaluddin,Gravity,Hindi,Aggressive,fast,Mumbai,
+27,Joota japani,Krsna,Hindi,"Chill, Aggressive",mid,Delhi,
+28,Mastikhor,Raga,Hindi,Aggressive,fast,Delhi,Ikka
+29,Nanchaku,Seedhe Maut,"Hindi, Marathi",Aggressive,fast,Delhi,MC Stan
+30,Cash money,Sikander Kahlon,"Punjabi, Hindi",Aggressive,mid,Chandigarh,Ikka
+31,Blackball,SOS,"Urdu, Hindi",Aggressive,fast,Other,
+32,Duniya makkar,Karma,Hindi,"Sad, Chill",slow,Delhi,
+33,The savarkar rage,Sambata,"Marathi, Hindi","Aggressive, Motivational",mid,Mumbai,
+34,Shit dawg,Naam Sujal,"Hindi, English",Chill,mid,Other,
+35,Pissed off,Yashraj,Hindi,Chill,slow,Mumbai,
+36,Kaha tak,Krsna,"Hindi, English","Motivational, Sad",mid,Delhi,
+37,Some of us,Krsna,"Hindi, English","Motivational, Conscious",slow,Delhi,
+38,3 drags,Vichaar,"Hindi, English","Chill, Aggressive",mid,Other,
+39,Tadipaar,MC Stan,"Hindi, Marathi","Aggressive, Sad",mid,Pune,
+40,Basti ka hasti,MC Stan,"Hindi, Marathi",Chill,slow,Pune,
+41,Dogs and snakes,Ikka,Hindi,Chill,slow,Delhi,
+42,Pyaar,Naam Sujal,Hindi,Chill,slow,Other,
+43,Sanatan,Yashraj,Hindi,Aggressive,fast,Mumbai,
+44,Bada,Karma,Hindi,Chill,mid,Delhi,
+45,I guess,Krsna,"Hindi, English",Chill,slow,Delhi,
+46,Grind,Emiway,"Hindi, Marathi",Chill,slow,Mumbai,
+47,Kaam 36,Divine,Hindi,Aggressive,mid,Mumbai,
+48,No cap,Krsna,"Hindi, English","Aggressive, Chill",fast,Delhi,
+49,Khatta flow,Seedhe Maut,Hindi,Aggressive,fast,Delhi,Krsna
+50,Big dawgs,Hanumankind,Hindi,Aggressive,fast,Other,
+51,Ignorance is bliss,Naam Sujal,Hindi,"Aggressive, Conscious",mid,Other,
+52,Sensitive,Krsna,"Hindi, English","Chill, Conscious",mid,Delhi,
+53,Mirchi,Divine,"Hindi, English",Chill,mid,Mumbai,
+54,Waapas milenge wahi,Naam Sujal,Hindi,"Chill, Sad",slow,Other,
+55,Mera parichay,Raftaar,"Hindi, English, Punjabi",Aggressive,fast,Chandigarh,Sikander Kahlon
+56,RED,Seedhe Maut,Hindi,"Motivational, Conscious",fast,Delhi,
+57,Kala,SOS,Urdu,Aggressive,fast,Other,
+58,Machaeynge,Emiway,Hindi,Chill,mid,Mumbai,
+59,Real shit,Raftaar,"Hindi, English","Motivational, Conscious",mid,Delhi,
+60,Blind spot,Naam Sujal,Hindi,"Sad, Conscious",slow,Other,

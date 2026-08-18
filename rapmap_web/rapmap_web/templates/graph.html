@@ -1,0 +1,334 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>RapMap — Song Graph</title>
+<script src="https://unpkg.com/vis-network/standalone/umd/vis-network.min.js"></script>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    background: #0a0a0f;
+    color: #e8e8f0;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+  }
+  nav {
+    background: #111118;
+    border-bottom: 1px solid #222230;
+    padding: 0 24px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: 54px;
+    flex-shrink: 0;
+  }
+  .logo { font-size: 18px; font-weight: 700; color: #fff; }
+  .logo span { color: #7F77DD; }
+  nav a {
+    color: #888;
+    text-decoration: none;
+    font-size: 13px;
+    padding: 5px 12px;
+    border-radius: 6px;
+    transition: all 0.2s;
+  }
+  nav a:hover { color: #fff; background: #1e1e2e; }
+
+  .graph-layout {
+    display: flex;
+    flex: 1;
+    overflow: hidden;
+  }
+
+  /* Sidebar */
+  .sidebar {
+    width: 280px;
+    background: #111118;
+    border-right: 1px solid #222230;
+    display: flex;
+    flex-direction: column;
+    flex-shrink: 0;
+    overflow-y: auto;
+  }
+  .sidebar-section { padding: 16px; border-bottom: 1px solid #1a1a2e; }
+  .sidebar-section h3 { font-size: 11px; font-weight: 700; color: #555; text-transform: uppercase; letter-spacing: 0.8px; margin-bottom: 10px; }
+
+  select {
+    width: 100%;
+    background: #0a0a0f;
+    border: 1px solid #2a2a3e;
+    color: #e8e8f0;
+    padding: 8px 10px;
+    border-radius: 6px;
+    font-size: 13px;
+    outline: none;
+    margin-bottom: 8px;
+    appearance: none;
+  }
+  select:focus { border-color: #7F77DD; }
+
+  .sidebar-btn {
+    width: 100%;
+    background: #7F77DD;
+    color: #fff;
+    border: none;
+    padding: 9px;
+    border-radius: 7px;
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 0.2s;
+    margin-bottom: 6px;
+  }
+  .sidebar-btn:hover { background: #6a62cc; }
+  .sidebar-btn.secondary {
+    background: transparent;
+    border: 1px solid #333;
+    color: #888;
+  }
+  .sidebar-btn.secondary:hover { border-color: #7F77DD; color: #fff; background: transparent; }
+
+  /* Legend */
+  .legend-item { display: flex; align-items: center; gap: 8px; margin-bottom: 6px; font-size: 12px; color: #888; }
+  .legend-dot { width: 10px; height: 10px; border-radius: 50%; flex-shrink: 0; }
+
+  /* Node info panel */
+  #node-info { display: none; }
+  .node-info-title  { font-size: 15px; font-weight: 700; color: #fff; margin-bottom: 4px; }
+  .node-info-artist { font-size: 13px; color: #888; margin-bottom: 10px; }
+  .node-info-badge  {
+    display: inline-block;
+    background: #1a1a2e;
+    border: 1px solid #2a2a4e;
+    color: #7F77DD;
+    font-size: 11px;
+    padding: 2px 8px;
+    border-radius: 12px;
+    margin: 2px 2px 2px 0;
+  }
+  .node-connections { font-size: 12px; color: #555; margin-top: 10px; }
+
+  .go-recommend {
+    display: block;
+    background: #1a1a2e;
+    border: 1px solid #2a2a4e;
+    color: #9090cc;
+    padding: 8px 12px;
+    border-radius: 7px;
+    font-size: 12px;
+    text-decoration: none;
+    text-align: center;
+    margin-top: 10px;
+    transition: all 0.2s;
+  }
+  .go-recommend:hover { border-color: #7F77DD; color: #fff; }
+
+  /* Graph canvas */
+  #graph-canvas {
+    flex: 1;
+    background: #0a0a0f;
+  }
+
+  /* Stats bar at bottom */
+  .stats-bar {
+    background: #111118;
+    border-top: 1px solid #222230;
+    padding: 8px 20px;
+    display: flex;
+    gap: 24px;
+    font-size: 12px;
+    color: #555;
+    flex-shrink: 0;
+  }
+  .stats-bar span { color: #888; }
+  .stats-bar b { color: #7F77DD; }
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="logo">Rap<span>Map</span> — Graph</div>
+  <div>
+    <a href="/">Recommend</a>
+    <a href="/graph">Graph</a>
+  </div>
+</nav>
+
+<div class="graph-layout">
+
+  <!-- Sidebar -->
+  <div class="sidebar">
+
+    <div class="sidebar-section">
+      <h3>Highlight seed</h3>
+      <select id="seed-select" onchange="highlightSeed(this.value)">
+        <option value="">None</option>
+        {% for song in songs %}
+        <option value="{{ song.song_id }}" {% if seed_id == song.song_id %}selected{% endif %}>
+          {{ song.title }} — {{ song.artist }}
+        </option>
+        {% endfor %}
+      </select>
+      <button class="sidebar-btn" onclick="goRecommend()">Recommend from this song</button>
+      <button class="sidebar-btn secondary" onclick="resetView()">Reset view</button>
+    </div>
+
+    <div class="sidebar-section">
+      <h3>City legend</h3>
+      <div class="legend-item"><div class="legend-dot" style="background:#7F77DD"></div> Delhi</div>
+      <div class="legend-item"><div class="legend-dot" style="background:#D85A30"></div> Mumbai</div>
+      <div class="legend-item"><div class="legend-dot" style="background:#639922"></div> Pune</div>
+      <div class="legend-item"><div class="legend-dot" style="background:#BA7517"></div> Chandigarh</div>
+      <div class="legend-item"><div class="legend-dot" style="background:#888780"></div> Other</div>
+      <div class="legend-item"><div class="legend-dot" style="background:#1F3864;border:2px solid #7F77DD"></div> Seed song</div>
+    </div>
+
+    <div class="sidebar-section">
+      <h3>How to use</h3>
+      <p style="font-size:12px;color:#555;line-height:1.6">
+        Click any node to see song details.<br><br>
+        Drag to pan, scroll to zoom.<br><br>
+        Thicker edges = higher similarity score between two songs.
+      </p>
+    </div>
+
+    <div class="sidebar-section" id="node-info">
+      <h3>Selected song</h3>
+      <div class="node-info-title" id="ni-title"></div>
+      <div class="node-info-artist" id="ni-artist"></div>
+      <div id="ni-badges"></div>
+      <div class="node-connections" id="ni-connections"></div>
+      <a class="go-recommend" id="ni-link" href="#">Recommend from this song</a>
+    </div>
+
+  </div>
+
+  <!-- Graph -->
+  <div id="graph-canvas"></div>
+
+</div>
+
+<div class="stats-bar">
+  <div>Nodes: <b id="stat-nodes">—</b></div>
+  <div>Edges: <b id="stat-edges">—</b></div>
+  <div>Hover over a node to see its connections</div>
+</div>
+
+<script>
+const rawData   = {{ graph_data | safe }};
+const seedIdInit = {{ seed_id if seed_id else 'null' }};
+
+const cityColors = {
+  "Delhi"      : "#7F77DD",
+  "Mumbai"     : "#D85A30",
+  "Pune"       : "#639922",
+  "Chandigarh" : "#BA7517",
+  "Other"      : "#888780"
+};
+
+function buildDataset(data, highlightId) {
+  const nodes = new vis.DataSet(data.nodes.map(n => ({
+    id    : n.id,
+    label : n.label,
+    title : `${n.label}\n${n.artist}\n${n.city}`,
+    color : {
+      background : highlightId && n.id === parseInt(highlightId) ? "#1F3864" : (cityColors[n.city] || "#888780"),
+      border     : highlightId && n.id === parseInt(highlightId) ? "#7F77DD" : "transparent",
+      highlight  : { background: "#7F77DD", border: "#fff" }
+    },
+    size       : highlightId && n.id === parseInt(highlightId) ? 22 : 10,
+    font       : { color: "#e8e8f0", size: 11 },
+    borderWidth: highlightId && n.id === parseInt(highlightId) ? 3 : 1,
+    _city      : n.city,
+    _artist    : n.artist
+  })));
+
+  const edges = new vis.DataSet(data.edges.map(e => ({
+    from  : e.from,
+    to    : e.to,
+    width : e.weight * 0.15,
+    color : { color: "#2a2a3e", highlight: "#7F77DD", opacity: 0.6 }
+  })));
+
+  return { nodes, edges };
+}
+
+let network;
+let currentSeedId = seedIdInit;
+
+function initGraph(seedId) {
+  const { nodes, edges } = buildDataset(rawData, seedId);
+  const container = document.getElementById("graph-canvas");
+
+  const options = {
+    physics: {
+      stabilization : { iterations: 150 },
+      barnesHut     : { gravitationalConstant: -8000, springLength: 120, springConstant: 0.04 }
+    },
+    interaction: {
+      hover         : true,
+      tooltipDelay  : 200,
+      hideEdgesOnDrag: true
+    },
+    nodes: {
+      shape       : "dot",
+      scaling     : { min: 8, max: 24 }
+    },
+    edges: {
+      smooth: { type: "continuous", roundness: 0.3 }
+    }
+  };
+
+  network = new vis.Network(container, { nodes, edges }, options);
+
+  document.getElementById("stat-nodes").textContent = nodes.length;
+  document.getElementById("stat-edges").textContent = edges.length;
+
+  network.on("click", params => {
+    if (params.nodes.length > 0) {
+      const nodeId   = params.nodes[0];
+      const nodeData = rawData.nodes.find(n => n.id === nodeId);
+      const degree   = rawData.edges.filter(e => e.from === nodeId || e.to === nodeId).length;
+
+      document.getElementById("node-info").style.display = "block";
+      document.getElementById("ni-title").textContent    = nodeData.label;
+      document.getElementById("ni-artist").textContent   = nodeData.artist;
+      document.getElementById("ni-connections").textContent = `${degree} connections in the graph`;
+
+      const badges = `
+        <span class="node-info-badge">${nodeData.city}</span>
+      `;
+      document.getElementById("ni-badges").innerHTML = badges;
+
+      const link = document.getElementById("ni-link");
+      link.href  = `/?song_id=${nodeId}`;
+      link.onclick = (e) => {
+        e.preventDefault();
+        window.location.href = `/?song_id=${nodeId}`;
+      };
+    }
+  });
+}
+
+function highlightSeed(val) {
+  currentSeedId = val ? parseInt(val) : null;
+  initGraph(currentSeedId);
+}
+
+function goRecommend() {
+  const val = document.getElementById("seed-select").value;
+  if (val) window.location.href = `/?song_id=${val}`;
+  else window.location.href = "/";
+}
+
+function resetView() {
+  if (network) network.fit({ animation: { duration: 500, easingFunction: "easeInOutQuad" } });
+}
+
+initGraph(currentSeedId);
+</script>
+</body>
+</html>
